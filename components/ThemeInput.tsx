@@ -1,7 +1,7 @@
 import { TextInput, type TextInputProps, StyleSheet, View } from "react-native";
-
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Keyboard } from "react-native";
 
 export type ThemedInputProps = TextInputProps & {
     lightColor?: string;
@@ -19,9 +19,9 @@ export function ThemedInput({
 }: ThemedInputProps) {
     const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
     const [isFocused, setIsFocused] = useState(false);
+    const inputRef = useRef<TextInput>(null);
 
     const handleFocus = () => {
-        console.log("focus Input", true);
         setIsFocused(true);
         setExitFocus(false);
     };
@@ -32,7 +32,11 @@ export function ThemedInput({
     };
 
     useEffect(() => {
-        if (exitFocus) {
+        if (exitFocus && inputRef.current) {
+            // Quita el foco programáticamente
+            inputRef.current.blur();
+            // Asegura que el teclado se oculte
+            Keyboard.dismiss();
             setIsFocused(false);
         }
     }, [exitFocus]);
@@ -47,10 +51,10 @@ export function ThemedInput({
             ]}
         >
             <TextInput
+                ref={inputRef}
                 style={{ color }}
                 placeholderTextColor={color}
                 onFocus={handleFocus}
-                onPress={handleFocus}
                 onBlur={handleBlur}
                 {...rest}
             />

@@ -4,7 +4,7 @@ import { ThemedView } from "./ThemedView";
 export default function Screen({ children }: { children: React.ReactNode }) {
     return (
         <View style={styles.container}>
-            <ThemedView>{children}</ThemedView>
+            <ThemedView style={styles.content}>{children}</ThemedView>
         </View>
     );
 }
@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingTop: 40,
         paddingBottom: 4,
-        paddingHorizontal: 16,
+        paddingHorizontal: 8,
+    },
+    content: {
+        width: "100%",
+        height: "100%",
     },
 });
